@@ -14855,3 +14855,5 @@ const words = [
   "ZYMES",
   "ZYMIC",
 ];
+
+module.exports = words;

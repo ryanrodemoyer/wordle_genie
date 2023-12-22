@@ -36,14 +36,14 @@ function gameSearch() {
 
       const div = document.createElement("div");
       div.style.color = "white";
-      div.textContent = words.length - answers.length;
+      div.textContent = `${words.length - answers.length} ${d.textContent}`;
       d.appendChild(div);
 
       rows[i + 1] = d;
     });
 
     const row1divs = document.querySelectorAll('div[aria-label="Row 1"] > div');
-    if (row1) {
+    if (row1divs) {
       // if (row1.length >= 5) {
       //   var fifthElement = elements[4]; // NodeList is zero-indexed, so the 5th element is at index 4
       //   fifthElement.parentNode.insertBefore(
