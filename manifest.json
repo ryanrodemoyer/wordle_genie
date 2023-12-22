@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+  "name": "wordle",
+  "version": "1.0",
+  "description": "wordle accelerator",
+  // "browser_action": {
+  //   "default_popup": "popup.html"
+  // },
+  // "background": {
+  //   "scripts": ["background.js"],
+  //   "persistent": false
+  // },
+  "content_scripts": [
+    {
+      "matches": ["https://*.nytimes.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "permissions": ["activeTab"]
+}
