@@ -1,7 +1,7 @@
-// alert("hey wordle");
+// import words from "words";
+// import answers from "answers";
 
-var gameId = 0,
-  adId = 0;
+var gameId = 0;
 
 function adSearch() {
   const ids = ["ad-top"];
@@ -9,7 +9,6 @@ function adSearch() {
     const ad = document.getElementById(x);
     if (ad) {
       ad.style.minHeight = "0px";
-      // ad.parentElement.remove(ad);
     }
   });
 }
@@ -17,28 +16,31 @@ function adSearch() {
 function gameSearch() {
   const game = document.getElementById("wordle-app-game");
   if (game) {
-    // alert("game found");
-
     clearInterval(gameId);
 
     const board = document.querySelector("[class*='Board-module_board']");
     if (board) {
-      // board.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
-    const rows = document.querySelector("[class*='Row-module_row']");
-    if (rows) {
-      rows.style.gridTemplateColumns = "repeat(6, 1fr)";
+    const rowsElement = document.querySelectorAll("[class*='Row-module_row']");
+    if (rowsElement) {
+      rowsElement.forEach((x) => {
+        x.style.gridTemplateColumns = "repeat(6, 1fr)";
+      });
     }
 
-    const row1 = document.querySelector('div[aria-label="Row 1"]');
-    if (row1) {
+    const rowIds = ["Row 1", "Row 2", "Row 3", "Row 4", "Row 5", "Row 6"];
+    const rows = [];
+    rowIds.forEach((x, i) => {
+      const d = document.querySelector(`div[aria-label="${x}"]`);
+
       const div = document.createElement("div");
       div.style.color = "white";
-      div.textContent = "1000";
+      div.textContent = words.length - answers.length;
+      d.appendChild(div);
 
-      row1.appendChild(div);
-    }
+      rows[i + 1] = d;
+    });
 
     const row1divs = document.querySelectorAll('div[aria-label="Row 1"] > div');
     if (row1) {
