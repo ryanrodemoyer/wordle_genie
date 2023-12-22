@@ -21,24 +21,24 @@ const config = {
   attempts: [
     {
       id: 1,
-      value: "trust",
+      value: "built",
       letters: [
-        { idx: 1, result: "YES", value: "T" },
-        { idx: 2, result: "NO", value: "R" },
-        { idx: 3, result: "YES", value: "U" },
-        { idx: 4, result: "NO", value: "S" },
-        { idx: 5, result: "NO", value: "T" },
+        { idx: 1, result: "NO", value: "B" },
+        { idx: 2, result: "WARM", value: "U" },
+        { idx: 3, result: "NO", value: "I" },
+        { idx: 4, result: "NO", value: "L" },
+        { idx: 5, result: "WARM", value: "T" },
       ],
     },
     {
       id: 2,
-      value: "rifle",
+      value: "check",
       letters: [
-        { idx: 1, result: "NO", value: "R" },
-        { idx: 2, result: "NO", value: "I" },
-        { idx: 3, result: "NO", value: "F" },
-        { idx: 4, result: "NO", value: "L" },
-        { idx: 5, result: "NO", value: "E" },
+        { idx: 1, result: "NO", value: "C" },
+        { idx: 2, result: "WARM", value: "H" },
+        { idx: 3, result: "NO", value: "E" },
+        { idx: 4, result: "YES", value: "C" },
+        { idx: 5, result: "NO", value: "K" },
       ],
     },
     // {
@@ -86,7 +86,7 @@ const solver = (config) => {
   for (let i = 1; i <= config.attempts.length; i++) {
     const attempts = config.attempts.filter((x) => x.id <= i);
     for (const attempt of attempts) {
-      for (const letter of attempt.letters) {
+      for (let [k, letter] of attempt.letters.entries()) {
         switch (letter.result) {
           case "YES":
             for (let j = results.length - 1; j >= 0; j--) {
@@ -97,7 +97,16 @@ const solver = (config) => {
                 results.splice(j, 1);
               }
             }
-
+            break;
+          case "WARM":
+            for (let j = results.length - 1; j >= 0; j--) {
+              const check = results[j].letters
+                .filter((y) => y.idx !== letter.idx)
+                .some((y) => y.value === letter.value);
+              if (!check) {
+                results.splice(j, 1);
+              }
+            }
             break;
         }
       }
@@ -112,12 +121,12 @@ test("first test", () => {
   console.dir(solverResult);
 });
 
-test("second test", () => {
-  const results = words.filter(
-    (x) => x[0] === "T" && x[1] === "O" && x[2] === "U" && x[4] === "H"
-  );
-  console.log(results);
-});
+// test("second test", () => {
+//   const results = words.filter(
+//     (x) => x[0] === "T" && x[1] === "O" && x[2] === "U" && x[4] === "H"
+//   );
+//   console.log(results);
+// });
 
 test("wordIndex", () => {
   const index = wordIndex(words);
