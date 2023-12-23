@@ -25,11 +25,20 @@ function gameInitialize(words) {
     });
   }
 
-  // const mutation = new MutationObserver();
+  // Options for the observer (which mutations to observe)
+  const config = { attributes: true, childList: true, subtree: true };
 
-  // mutation.observe();
+  // Callback function to execute when mutations are observed
+  const callback = function (mutationsList, observer) {
+    // for(let mutation of mutationsList) {
+    //     if (mutation.type === 'childList') {
+    //         console.log('A child node has been added or removed.');
+    //     }
+    //     else if (mutation.type === 'attributes') {
+    //         console.log(`The ${mutation.attributeName} attribute was modified.`);
+    //     }
+    // }
 
-  setTimeout(() => {
     const rowIds = [
       { id: 1, val: "Row 1" },
       { id: 2, val: "Row 2" },
@@ -46,11 +55,20 @@ function gameInitialize(words) {
         absent: "NO",
         correct: "YES",
       };
-      const letters = Array.from(d.children).map((x, j) => ({
-        idx: j + 1,
-        value: x.firstChild.textContent.toUpperCase(),
-        result: stateMap[x.firstChild.getAttribute("data-state")],
-      }));
+      const letters = Array.from(d.children).map((y, j) => {
+        const val = null;
+        try {
+          val = y.firstChild.getAttribute("data-state");
+        } catch (e) {
+          console.log(e);
+        }
+
+        return {
+          idx: j + 1,
+          value: y.firstChild.textContent.toUpperCase(),
+          result: stateMap[val],
+        };
+      });
 
       return {
         id: x.id,
@@ -77,7 +95,15 @@ function gameInitialize(words) {
       }
       d.appendChild(div);
     });
-  }, 1000);
+  };
+
+  // Create an instance of MutationObserver with the callback
+  const observer = new MutationObserver(callback);
+
+  // Start observing the target node for configured mutations
+  observer.observe(board, config);
+
+  // setTimeout(() => {}, 1000);
 
   const row1divs = document.querySelectorAll('div[aria-label="Row 1"] > div');
   if (row1divs) {
