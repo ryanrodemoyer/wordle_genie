@@ -170,10 +170,6 @@ const solverPrivate = (words, attempts, i) => {
 };
 
 const solver = (config) => {
-  // const results2 = config.attempts.map((attempt, i) =>
-  //   solverPrivate(config.words, attempt, i + 1)
-  // );
-
   const results = Array.from({ length: config.attempts.length }, (_, i) =>
     solverPrivate(
       config.words,
@@ -191,13 +187,6 @@ test("first test", () => {
   // console.dir(JSON.stringify(solverResult));
   console.dir(solverResult);
 });
-
-// test("second test", () => {
-//   const results = words.filter(
-//     (x) => x[0] === "T" && x[1] === "O" && x[2] === "U" && x[4] === "H"
-//   );
-//   console.log(results);
-// });
 
 test("grouped", () => {
   const arr = [1];
@@ -222,33 +211,3 @@ test("explore", () => {
 
   //   console.dir(no);
 });
-
-// test("solver", () => {
-//   const result = solver(config);
-// });
-
-// const result = {
-//   attempts: [
-//     {
-//       id: 1,
-//       possibilities: calculateRemainingWords(
-//         words,
-//         config.attempts.filter((x) => x.id <= id)
-//       ),
-//     },
-//     {
-//       id: 2,
-//       possibilities: calculateRemainingWords(
-//         words,
-//         config.attempts.filter((x) => x.id <= id)
-//       ),
-//     },
-//     {
-//       id: 3,
-//       possibilities: calculateRemainingWords(
-//         words,
-//         config.attempts.filter((x) => x.id <= id)
-//       ),
-//     },
-//   ],
-// };
