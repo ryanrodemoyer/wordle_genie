@@ -53,7 +53,7 @@ const config = {
     },
     {
       id: 4,
-      value: "chime",
+      value: "lapse",
       letters: [
         { idx: 1, result: "WARM", value: "L" },
         { idx: 2, result: "NO", value: "A" },
@@ -76,10 +76,10 @@ const config = {
   ],
 };
 
-const groupAtttempts = (config, i) => {
-  const attempts = config.attempts.filter((x) => x.id <= i);
+const groupAtttempts = (attempts, i) => {
+  const attemptsCumulative = attempts.filter((x) => x.id <= i);
 
-  const grouped = attempts
+  const grouped = attemptsCumulative
     .filter((x) => x.id <= i)
     .flatMap((x) => x.letters)
     .reduce((acc, curr) => {
@@ -125,18 +125,10 @@ const processYes = (entry, letter) => {
 
 const processWarm = (entry, letter, filteredIndexes) => {
   for (let j = entry.possibilities.length - 1; j >= 0; j--) {
-    // const word = entry.possibilities[j];
-    // if (word.value === search) {
-    //   console.log(word.value);
-    // }
-
     const check = entry.possibilities[j].letters
       .filter((y) => filteredIndexes.includes(y.idx) === false)
       .some((y) => y.value === letter.value);
     if (!check) {
-      // if (entry.possibilities[j].value === search) {
-      //   console.log(`removing ${search}`);
-      // }
       entry.possibilities.splice(j, 1);
     }
   }
@@ -144,26 +136,19 @@ const processWarm = (entry, letter, filteredIndexes) => {
 
 const processNo = (entry, letter, filteredIndexes) => {
   for (let j = entry.possibilities.length - 1; j >= 0; j--) {
-    // const word = entry.possibilities[j];
-    // if (word.value === search) {
-    //   console.log(word.value);
-    // }
     const check = entry.possibilities[j].letters
       .filter((y) => filteredIndexes.includes(y.idx))
       .some((y) => y.value === letter.value);
     if (check) {
-      // if (entry.possibilities[j].value === search) {
-      //   console.log(`removing ${search}`);
-      // }
       entry.possibilities.splice(j, 1);
     }
   }
 };
 
-const solverPrivate = (config, attempt, i) => {
-  const entry = { idx: i, possibilities: [...config.words] };
+const solverPrivate = (words, attempt, i) => {
+  const entry = { idx: i, possibilities: [...words] };
 
-  const grouped = groupAtttempts(config, i);
+  const grouped = groupAtttempts(config.attempts, i);
 
   for (const letter of attempt.letters) {
     const filteredIndexes = buildFilteredIndexes(grouped, letter);
@@ -185,8 +170,8 @@ const solverPrivate = (config, attempt, i) => {
 };
 
 const solver = (config) => {
-  const results = config.attempts.map((z, zi) =>
-    solverPrivate(config, z, zi + 1)
+  const results = config.attempts.map((attempt, i) =>
+    solverPrivate(config.words, attempt, i + 1)
   );
 
   return { attempts: results };
