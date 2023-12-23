@@ -20,24 +20,24 @@ const config = {
   attempts: [
     {
       id: 1,
-      value: "built",
+      value: "check",
       letters: [
-        { idx: 1, result: "NO", value: "B" },
-        { idx: 2, result: "WARM", value: "U" },
-        { idx: 3, result: "NO", value: "I" },
-        { idx: 4, result: "NO", value: "L" },
-        { idx: 5, result: "WARM", value: "T" },
+        { idx: 1, result: "NO", value: "C" },
+        { idx: 2, result: "NO", value: "H" },
+        { idx: 3, result: "WARM", value: "E" },
+        { idx: 4, result: "NO", value: "C" },
+        { idx: 5, result: "NO", value: "K" },
       ],
     },
     {
       id: 2,
-      value: "check",
+      value: "pride",
       letters: [
-        { idx: 1, result: "NO", value: "C" },
-        { idx: 2, result: "WARM", value: "H" },
-        { idx: 3, result: "NO", value: "E" },
-        { idx: 4, result: "YES", value: "C" },
-        { idx: 5, result: "NO", value: "K" },
+        { idx: 1, result: "WARM", value: "P" },
+        { idx: 2, result: "NO", value: "R" },
+        { idx: 3, result: "NO", value: "I" },
+        { idx: 4, result: "NO", value: "D" },
+        { idx: 5, result: "YES", value: "E" },
       ],
     },
     // {
@@ -56,31 +56,91 @@ const config = {
 
 const solver = (config) => {
   let result = { attempts: [] };
+
   for (let i = 1; i <= config.attempts.length; i++) {
     const entry = { idx: i, possibilities: [...config.words] };
     result.attempts.push(entry);
 
     const attempts = config.attempts.filter((x) => x.id <= i);
+
+    const grouped = attempts
+      .filter((x) => x.id <= i)
+      .flatMap((x) => x.letters)
+      .reduce((acc, curr) => {
+        if (acc.hasOwnProperty(curr.value)) {
+          if (acc[curr.value].find((x) => x.result !== curr.result)) {
+            acc[curr.value].push(curr);
+          }
+        } else {
+          acc[curr.value] = [curr];
+        }
+        return acc;
+      }, []);
+
     for (const attempt of attempts) {
-      for (let [k, letter] of attempt.letters.entries()) {
+      for (const letter of attempt.letters) {
         switch (letter.result) {
           case "YES":
-            for (let j = entry.possibilities[i].length - 1; j >= 0; j--) {
-              const check = entry.possibilities[i][j].letters.find(
+            for (let j = entry.possibilities.length - 1; j >= 0; j--) {
+              const check = entry.possibilities[j].letters.find(
                 (y) => y.idx === letter.idx && y.value === letter.value
               );
               if (!check) {
-                entry.possibilities[i].splice(j, 1);
+                entry.possibilities.splice(j, 1);
               }
             }
             break;
           case "WARM":
-            for (let j = entry.possibilities[i].length - 1; j >= 0; j--) {
-              const check = entry.possibilities[i][j].letters
-                .filter((y) => y.idx !== letter.idx)
-                .some((y) => y.value === letter.value);
-              if (!check) {
-                entry.possibilities[i].splice(j, 1);
+          case "NO":
+            const filteredIndexes = [];
+            if (grouped[letter.value].length === 1) {
+              if (letter.result === "WARM") {
+                filteredIndexes.push(letter.idx);
+              } else {
+                filteredIndexes.push(...[1, 2, 3, 4, 5]);
+              }
+            } else {
+              filteredIndexes.push(
+                ...grouped[letter.value]
+                  .filter((x) => x.result != "YES")
+                  .map((x) => x.idx)
+              );
+            }
+
+            const search = "PRIDE";
+
+            if (letter.result === "WARM") {
+              for (let j = entry.possibilities.length - 1; j >= 0; j--) {
+                const word = entry.possibilities[j];
+                if (word.value === search) {
+                  console.log(word.value);
+                }
+
+                const check = entry.possibilities[j].letters
+                  .filter((y) => filteredIndexes.includes(y.idx) === false)
+                  .some((y) => y.value === letter.value);
+                if (!check) {
+                  if (entry.possibilities[j].value === search) {
+                    console.log(`removing ${search}`);
+                  }
+                  entry.possibilities.splice(j, 1);
+                }
+              }
+            } else {
+              for (let j = entry.possibilities.length - 1; j >= 0; j--) {
+                const word = entry.possibilities[j];
+                if (word.value === search) {
+                  console.log(word.value);
+                }
+                const check = entry.possibilities[j].letters
+                  .filter((y) => filteredIndexes.includes(y.idx))
+                  .some((y) => y.value === letter.value);
+                if (check) {
+                  if (entry.possibilities[j].value === search) {
+                    console.log(`removing ${search}`);
+                  }
+                  entry.possibilities.splice(j, 1);
+                }
               }
             }
             break;
@@ -105,6 +165,15 @@ test("first test", () => {
 //   console.log(results);
 // });
 
+test("grouped", () => {
+  const arr = [1];
+  const arr2 = [3, 2];
+
+  arr.push(...arr2);
+
+  console.dir(arr);
+});
+
 test("wordIndex", () => {
   const index = wordIndex(words);
 
@@ -120,9 +189,9 @@ test("explore", () => {
   //   console.dir(no);
 });
 
-test("solver", () => {
-  const result = solver(config);
-});
+// test("solver", () => {
+//   const result = solver(config);
+// });
 
 // const result = {
 //   attempts: [
