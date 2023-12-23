@@ -9,7 +9,6 @@ const wordIndex = (words) => {
         acc.push({ idx: j + 1, value: curr });
         return acc;
       }, []),
-      uniques: [...new Set(x)],
     };
   });
 
@@ -55,56 +54,33 @@ const config = {
   ],
 };
 
-// const result = {
-//   attempts: [
-//     {
-//       id: 1,
-//       possibilities: calculateRemainingWords(
-//         words,
-//         config.attempts.filter((x) => x.id <= id)
-//       ),
-//     },
-//     {
-//       id: 2,
-//       possibilities: calculateRemainingWords(
-//         words,
-//         config.attempts.filter((x) => x.id <= id)
-//       ),
-//     },
-//     {
-//       id: 3,
-//       possibilities: calculateRemainingWords(
-//         words,
-//         config.attempts.filter((x) => x.id <= id)
-//       ),
-//     },
-//   ],
-// };
-
 const solver = (config) => {
-  let results = [...config.words];
+  let result = { attempts: [] };
   for (let i = 1; i <= config.attempts.length; i++) {
+    const entry = { idx: i, possibilities: [...config.words] };
+    result.attempts.push(entry);
+
     const attempts = config.attempts.filter((x) => x.id <= i);
     for (const attempt of attempts) {
       for (let [k, letter] of attempt.letters.entries()) {
         switch (letter.result) {
           case "YES":
-            for (let j = results.length - 1; j >= 0; j--) {
-              const check =
-                results[j].letters.find((y) => y.idx === letter.idx).value ===
-                letter.value;
+            for (let j = entry.possibilities[i].length - 1; j >= 0; j--) {
+              const check = entry.possibilities[i][j].letters.find(
+                (y) => y.idx === letter.idx && y.value === letter.value
+              );
               if (!check) {
-                results.splice(j, 1);
+                entry.possibilities[i].splice(j, 1);
               }
             }
             break;
           case "WARM":
-            for (let j = results.length - 1; j >= 0; j--) {
-              const check = results[j].letters
+            for (let j = entry.possibilities[i].length - 1; j >= 0; j--) {
+              const check = entry.possibilities[i][j].letters
                 .filter((y) => y.idx !== letter.idx)
                 .some((y) => y.value === letter.value);
               if (!check) {
-                results.splice(j, 1);
+                entry.possibilities[i].splice(j, 1);
               }
             }
             break;
@@ -112,12 +88,13 @@ const solver = (config) => {
       }
     }
   }
-  return results;
+  return result;
 };
 
 test("first test", () => {
   const solverResult = solver(config);
 
+  // console.dir(JSON.stringify(solverResult));
   console.dir(solverResult);
 });
 
@@ -146,3 +123,29 @@ test("explore", () => {
 test("solver", () => {
   const result = solver(config);
 });
+
+// const result = {
+//   attempts: [
+//     {
+//       id: 1,
+//       possibilities: calculateRemainingWords(
+//         words,
+//         config.attempts.filter((x) => x.id <= id)
+//       ),
+//     },
+//     {
+//       id: 2,
+//       possibilities: calculateRemainingWords(
+//         words,
+//         config.attempts.filter((x) => x.id <= id)
+//       ),
+//     },
+//     {
+//       id: 3,
+//       possibilities: calculateRemainingWords(
+//         words,
+//         config.attempts.filter((x) => x.id <= id)
+//       ),
+//     },
+//   ],
+// };
