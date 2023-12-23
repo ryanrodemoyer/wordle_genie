@@ -1,4 +1,4 @@
-const words = [
+[
   "AAHED",
   "AALII",
   "AAPAS",
@@ -14853,5 +14853,5 @@ const words = [
   "ZYGAL",
   "ZYGON",
   "ZYMES",
-  "ZYMIC",
-];
+  "ZYMIC"
+]

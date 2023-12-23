@@ -3,18 +3,12 @@
   "name": "wordle",
   "version": "1.0",
   "description": "wordle accelerator",
-  // "browser_action": {
-  //   "default_popup": "popup.html"
-  // },
-  // "background": {
-  //   "scripts": ["background.js"],
-  //   "persistent": false
-  // },
   "content_scripts": [
     {
       "matches": ["https://*.nytimes.com/*"],
-      "js": ["words.js", "answers.js", "content.js"]
+      "js": ["solver.js", "answers.js", "content.js"]
     }
   ],
+  "web_accessible_resources": ["words.json"],
   "permissions": ["activeTab"]
 }

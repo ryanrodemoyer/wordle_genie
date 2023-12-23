@@ -118,4 +118,4 @@ const solver = (config) => {
   return { attempts: results };
 };
 
-module.exports = solver;
+// module.exports = solver;

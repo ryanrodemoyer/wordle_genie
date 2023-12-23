@@ -11,6 +11,14 @@
       "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
       "args": ["-i"],
       "skipFiles": ["<node_internals>/**/*.js", "node_modules"]
+    },
+    {
+      "name": "Launch Edge against localhost",
+      "type": "msedge",
+      "request": "launch",
+      "url": "https://www.nytimes.com/games/wordle/index.html", // Update with your URL
+      "webRoot": "${workspaceFolder}",
+      "runtimeArgs": ["--load-extension=${workspaceFolder}"]
     }
   ]
 }
