@@ -40,17 +40,28 @@ const config = {
         { idx: 5, result: "YES", value: "E" },
       ],
     },
-    // {
-    //   id: 3,
-    //   value: "tough",
-    //   letters: [
-    //     { idx: 1, result: "YES", value: "T" },
-    //     { idx: 2, result: "YES", value: "O" },
-    //     { idx: 3, result: "YES", value: "U" },
-    //     { idx: 4, result: "NO", value: "G" },
-    //     { idx: 5, result: "YES", value: "H" },
-    //   ],
-    // },
+    {
+      id: 3,
+      value: "chime",
+      letters: [
+        { idx: 1, result: "NO", value: "C" },
+        { idx: 2, result: "NO", value: "H" },
+        { idx: 3, result: "NO", value: "I" },
+        { idx: 4, result: "NO", value: "M" },
+        { idx: 5, result: "YES", value: "E" },
+      ],
+    },
+    {
+      id: 4,
+      value: "chime",
+      letters: [
+        { idx: 1, result: "WARM", value: "L" },
+        { idx: 2, result: "NO", value: "A" },
+        { idx: 3, result: "WARM", value: "P" },
+        { idx: 4, result: "WARM", value: "S" },
+        { idx: 5, result: "YES", value: "E" },
+      ],
+    },
   ],
 };
 
