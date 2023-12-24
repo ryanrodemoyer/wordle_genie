@@ -25,20 +25,9 @@ function gameInitialize(words) {
     });
   }
 
-  // Options for the observer (which mutations to observe)
-  const config = { attributes: true, childList: true, subtree: true };
+  const customCols = [];
 
-  // Callback function to execute when mutations are observed
-  const callback = function (mutationsList, observer) {
-    // for(let mutation of mutationsList) {
-    //     if (mutation.type === 'childList') {
-    //         console.log('A child node has been added or removed.');
-    //     }
-    //     else if (mutation.type === 'attributes') {
-    //         console.log(`The ${mutation.attributeName} attribute was modified.`);
-    //     }
-    // }
-
+  const callback = function () {
     const rowIds = [
       { id: 1, val: "Row 1" },
       { id: 2, val: "Row 2" },
@@ -50,25 +39,44 @@ function gameInitialize(words) {
     const rows = rowIds.map((x) => {
       const d = document.querySelector(`div[aria-label="${x.val}"]`);
 
+      const selectorName = `row${x.id}-custom`;
+      const customColsCollection = document.querySelector(`#${selectorName}`);
+      if (!customColsCollection) {
+        // todo redo this using a row below to show the extra info
+        // grid-template-columns: 1 / span 6
+        const div = document.createElement("div");
+        div.style.color = "white";
+        div.id = selectorName;
+        div.textContent = "";
+        d.appendChild(div);
+        customCols[x.id] = div;
+      }
+
       const stateMap = {
         present: "WARM",
         absent: "NO",
         correct: "YES",
       };
-      const letters = Array.from(d.children).map((y, j) => {
-        const val = null;
-        try {
-          val = y.firstChild.getAttribute("data-state");
-        } catch (e) {
-          console.log(e);
-        }
+      const letters = Array.from(d.children)
+        .map((y, j) => {
+          let val = null;
+          try {
+            val = y.firstChild.getAttribute("data-state");
+          } catch (e) {
+            return null;
+          }
 
-        return {
-          idx: j + 1,
-          value: y.firstChild.textContent.toUpperCase(),
-          result: stateMap[val],
-        };
-      });
+          if (val === "tbd") {
+            throw new Error("wait longer");
+          }
+
+          return {
+            idx: j + 1,
+            value: y.firstChild.textContent.toUpperCase(),
+            result: stateMap[val],
+          };
+        })
+        .filter((y) => y != null);
 
       return {
         id: x.id,
@@ -76,8 +84,6 @@ function gameInitialize(words) {
         letters,
       };
     });
-
-    // alert(JSON.stringify(rows.filter((x) => x.value)));
 
     const solverResult = solver({
       words,
@@ -87,23 +93,15 @@ function gameInitialize(words) {
     solverResult.attempts.forEach((y) => {
       const d = document.querySelector(`div[aria-label="Row ${y.idx}"]`);
 
-      const div = document.createElement("div");
-      div.style.color = "white";
+      const div = customCols[y.idx];
       div.textContent = y.possibilities.length;
       if (y.possibilities.length <= 5) {
         div.textContent += y.possibilities.map((x) => x.value).join(",");
       }
-      d.appendChild(div);
     });
   };
 
-  // Create an instance of MutationObserver with the callback
-  const observer = new MutationObserver(callback);
-
-  // Start observing the target node for configured mutations
-  observer.observe(board, config);
-
-  // setTimeout(() => {}, 1000);
+  setInterval(callback, 1000);
 
   const row1divs = document.querySelectorAll('div[aria-label="Row 1"] > div');
   if (row1divs) {
