@@ -16,10 +16,6 @@ function adSearch() {
 const customRows = [];
 
 function gameInitialize(words) {
-  const board = document.querySelector("[class*='Board-module_board']");
-  if (board) {
-  }
-
   const rowsElement = document.querySelectorAll("[class*='Row-module_row']");
   if (rowsElement) {
     rowsElement.forEach((x) => {
@@ -32,7 +28,7 @@ function gameInitialize(words) {
       div.style.color = "white";
       div.style.gridTemplateColumns = "1 / span 6";
       div.id = selectorName;
-      div.textContent = "custom row";
+      div.textContent = " ";
       x.parentNode.insertBefore(div, x.nextSibling);
       customRows[selectorName] = div;
     });
@@ -109,7 +105,7 @@ function gameInitialize(words) {
       const div = customCols[y.idx];
       const divRow = customRows[`rowRow${y.idx}`];
       div.textContent = ` `;
-      divRow.textContent = `${y.possibilities.length}`;
+      divRow.textContent = `${y.possibilities.length} remaining words`;
       if (y.possibilities.length <= 10) {
         divRow.textContent = `${y.possibilities.length} - `;
 
@@ -117,6 +113,16 @@ function gameInitialize(words) {
         divRow.textContent += y.possibilities.map((x) => x.value).join(",");
       }
     });
+
+    const module = document.querySelector("#wordle-app-game");
+    if (module) {
+      module.style.height = "650px";
+    }
+
+    const board = document.querySelector("[class*='Board-module_board__']");
+    if (board) {
+      board.style.height = "450px";
+    }
   };
 
   setInterval(callback, 1000);
