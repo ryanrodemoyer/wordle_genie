@@ -13,6 +13,8 @@ function adSearch() {
   });
 }
 
+const customRows = [];
+
 function gameInitialize(words) {
   const board = document.querySelector("[class*='Board-module_board']");
   if (board) {
@@ -22,6 +24,17 @@ function gameInitialize(words) {
   if (rowsElement) {
     rowsElement.forEach((x) => {
       x.style.gridTemplateColumns = "repeat(6, 1fr)";
+
+      const selectorName = `row${x
+        .getAttribute("aria-label")
+        .replace(" ", "")}`;
+      const div = document.createElement("div");
+      div.style.color = "white";
+      div.style.gridTemplateColumns = "1 / span 6";
+      div.id = selectorName;
+      div.textContent = "custom row";
+      x.parentNode.insertBefore(div, x.nextSibling);
+      customRows[selectorName] = div;
     });
   }
 
@@ -39,7 +52,7 @@ function gameInitialize(words) {
     const rows = rowIds.map((x) => {
       const d = document.querySelector(`div[aria-label="${x.val}"]`);
 
-      const selectorName = `row${x.id}-custom`;
+      const selectorName = `col${x.id}-custom`;
       const customColsCollection = document.querySelector(`#${selectorName}`);
       if (!customColsCollection) {
         // todo redo this using a row below to show the extra info
@@ -94,9 +107,14 @@ function gameInitialize(words) {
       const d = document.querySelector(`div[aria-label="Row ${y.idx}"]`);
 
       const div = customCols[y.idx];
-      div.textContent = y.possibilities.length;
-      if (y.possibilities.length <= 5) {
-        div.textContent += y.possibilities.map((x) => x.value).join(",");
+      const divRow = customRows[`rowRow${y.idx}`];
+      div.textContent = ` `;
+      divRow.textContent = `${y.possibilities.length}`;
+      if (y.possibilities.length <= 10) {
+        divRow.textContent = `${y.possibilities.length} - `;
+
+        // div.textContent += y.possibilities.map((x) => x.value).join(",");
+        divRow.textContent += y.possibilities.map((x) => x.value).join(",");
       }
     });
   };

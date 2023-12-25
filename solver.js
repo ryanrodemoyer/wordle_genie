@@ -47,10 +47,18 @@ const processYes = (entry, letter) => {
 
 const processWarm = (entry, letter, filteredIndexes) => {
   for (let j = entry.possibilities.length - 1; j >= 0; j--) {
-    const check = entry.possibilities[j].letters
-      .filter((y) => filteredIndexes.includes(y.idx) === false)
-      .some((y) => y.value === letter.value);
-    if (!check) {
+    const p = entry.possibilities[j];
+    // retrieve the letter indexes NOT in the warm position
+    const filtered = p.letters.filter(
+      (y) => filteredIndexes.includes(y.idx) === false
+    );
+
+    // check if the remaining letters match the WARM letter
+    const check = filtered.some((y) => y.value === letter.value);
+    const check2 = p.letters.find(
+      (y) => y.idx === letter.idx && y.value !== letter.value
+    );
+    if (!check || !check2) {
       entry.possibilities.splice(j, 1);
     }
   }
@@ -118,4 +126,4 @@ const solver = (config) => {
   return { attempts: results };
 };
 
-// module.exports = solver;
+module.exports = solver;
