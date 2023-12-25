@@ -25,8 +25,8 @@ const processBoard = function () {
       const value = y.firstChild.textContent.toUpperCase();
       const result = resultMap[state];
       return {
-        row: i + 1,
-        idx: x.id,
+        row: x.id,
+        idx: i + 1,
         value,
         result,
       };
@@ -59,11 +59,6 @@ const processBoard = function () {
       }
     }
   });
-
-  // solverResult.attempts.forEach((y) => {
-  //   const r = document.getElementById(`row-Row${y.idx}`);
-
-  // });
 
   const module = document.querySelector("#wordle-app-game");
   if (module) {
