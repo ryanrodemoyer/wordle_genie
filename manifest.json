@@ -1,14 +1,30 @@
 {
-  "manifest_version": 2,
-  "name": "wordle",
-  "version": "1.0",
-  "description": "wordle accelerator",
+  "manifest_version": 3,
+  "name": "Wordle Genie",
+  "version": "0.1.0",
+  "description": "Wordle Genie is not affiliated with nor endorsed by the NY Times. This extension integrates directly with the Wordle game to show the remaining possibilities based on the board hints.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "19": "icons/icon16.png",
+      "38": "icons/icon48.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
   "content_scripts": [
     {
       "matches": ["https://*.nytimes.com/*"],
-      "js": ["solver.js", "answers.js", "content.js"]
+      "js": ["scripts/solver.js", "scripts/answers.js", "scripts/content.js"]
     }
   ],
-  "web_accessible_resources": ["words.json"],
-  "permissions": ["activeTab"]
+  "web_accessible_resources": [
+    {
+      "resources": ["includes/words.json"],
+      "matches": ["https://*.nytimes.com/*"]
+    }
+  ],
+  "permissions": ["activeTab"],
+  "host_permissions": ["https://*.nytimes.com/*"]
 }

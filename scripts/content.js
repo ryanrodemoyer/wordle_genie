@@ -17,44 +17,54 @@ const rowConfig = [
 ];
 
 const processBoard = function () {
-  const rows = rowConfig.map((x) => {
-    const res = document.querySelector(`div[aria-label="${x.lbl}"]`);
+  const rows = rowConfig
+    .map((x) => {
+      const res = document.querySelector(`div[aria-label="${x.lbl}"]`);
 
-    const letters = Array.from(res.children).map((y, i) => {
-      const state = y.firstChild.getAttribute("data-state");
-      const value = y.firstChild.textContent.toUpperCase();
-      const result = resultMap[state];
+      const letters = Array.from(res.children).map((y, i) => {
+        const state = y.firstChild.getAttribute("data-state");
+        const value = y.firstChild.textContent.toUpperCase();
+        const result = resultMap[state];
+        return {
+          row: x.id,
+          idx: i + 1,
+          value,
+          result,
+        };
+      });
+
       return {
-        row: x.id,
-        idx: i + 1,
-        value,
-        result,
+        id: x.id,
+        customId: x.customId,
+        value: res.textContent,
+        letters: letters,
       };
-    });
+    })
+    .filter((x) => x.letters.every((y) => y.result));
 
-    return {
-      id: x.id,
-      value: res.textContent,
-      letters: letters,
-    };
-  });
-
-  const attempts = rows.filter((x) => x.value);
+  const attempts = rows;
   const solverResult = solver({
     words: window.words,
     attempts: attempts,
   });
 
-  rowConfig.forEach((x) => {
+  rows.forEach((x) => {
     const r = document.getElementById(x.customId);
     if (r) {
       const a = solverResult.attempts.find((y) => y.idx === x.id);
       if (a) {
-        if (a.possibilities.length <= 10) {
-          r.textContent = `${a.possibilities.length} - `;
-          r.textContent += a.possibilities.map((y) => y.value).join(",");
+        const guess = attempts
+          .find((y) => y.id === x.id)
+          .letters.every((y) => y.result === "YES");
+        if (guess) {
+          r.textContent = "winner!";
         } else {
-          r.textContent = `${a.possibilities.length} remaining words`;
+          if (a.possibilities.length <= 6) {
+            r.textContent = `${a.possibilities.length} - `;
+            r.textContent += a.possibilities.map((y) => y.value).join(",");
+          } else {
+            r.textContent = `${a.possibilities.length} remaining words`;
+          }
         }
       }
     }
@@ -62,12 +72,12 @@ const processBoard = function () {
 
   const module = document.querySelector("#wordle-app-game");
   if (module) {
-    module.style.height = "650px";
+    module.style.height = "700px";
   }
 
   const board = document.querySelector("[class*='Board-module_board__']");
   if (board) {
-    board.style.height = "450px";
+    board.style.height = "500px";
   }
 };
 
@@ -86,7 +96,7 @@ function gameInitialize(words) {
 
         const div = document.createElement("div");
         div.style.color = "white";
-        div.style.gridTemplateColumns = "1 / span 6";
+        div.style.gridTemplateColumns = "1 / span 5";
         div.id = selectorName;
         div.textContent = " ";
 
@@ -97,7 +107,7 @@ function gameInitialize(words) {
         return res;
       })
       .forEach((x) => {
-        x.element.style.gridTemplateColumns = "repeat(6, 1fr)";
+        x.element.style.gridTemplateColumns = "repeat(5, 1fr)";
         x.element.parentNode.insertBefore(x.col, x.element.nextSibling);
       });
 
@@ -108,7 +118,7 @@ function gameInitialize(words) {
 function gameSearch() {
   const game = document.getElementById("wordle-app-game");
   if (game) {
-    fetch(chrome.runtime.getURL("/words.json"))
+    fetch(chrome.runtime.getURL("/includes/words.json"))
       .then((response) => response.json())
       .then((data) => gameInitialize(data))
       .catch((error) => {
@@ -126,18 +136,17 @@ function buttonSearch() {
   const buttonIds = [
     "button[data-testid='Continue']",
     "button[data-testid='See Stats']",
+    "button[class*='Modal-module_closeIconButton']",
   ];
 
   buttonIds.forEach((x) => {
     const btn = document.querySelector(x);
     if (btn) {
-      clearInterval(intervalId_buttonSearch);
-
-      btn.addEventListener("click", (elem) => {});
-
       btn.click();
     }
   });
+
+  clearInterval(intervalId_buttonSearch);
 }
 
 var intervalId_buttonSearch = setInterval(buttonSearch, 500);

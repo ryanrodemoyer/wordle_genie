@@ -126,4 +126,6 @@ const solver = (config) => {
   return { attempts: results };
 };
 
-module.exports = solver;
+if (module) {
+  module.exports = solver;
+}

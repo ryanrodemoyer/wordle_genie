@@ -1,4 +1,5 @@
 const historicalAnswers = [
+  "DAISY",
   "EVOKE",
   "SLOPE",
   "TOUCH",

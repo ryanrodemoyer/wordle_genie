@@ -1,5 +1,5 @@
 const solver = require("./solver");
-const words = require("./words.json");
+const words = require("../includes/words.json");
 
 const config = {
   words: words,
