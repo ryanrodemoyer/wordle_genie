@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Wordle Genie",
   "version": "0.1.0",
-  "description": "Wordle Genie is not affiliated with nor endorsed by the NY Times. This extension integrates directly with the Wordle game to show the remaining possibilities based on the board hints.",
+  "description": "This extension integrates directly with the Wordle game to show the remaining possibilities based on the board hints.",
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
