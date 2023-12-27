@@ -1,4 +1,4 @@
-const historicalAnswers = [
+[
   "DAISY",
   "EVOKE",
   "SLOPE",
@@ -918,7 +918,5 @@ const historicalAnswers = [
   "HUMPH",
   "SISSY",
   "REBUT",
-  "CIGAR",
-];
-
-const answers = [...new Set(historicalAnswers)];
+  "CIGAR"
+]
