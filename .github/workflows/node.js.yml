@@ -28,12 +28,7 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm test
-    
-    - name: Create artifact
-      run: |
-        zip -r chrome-extension.zip . -x "node_modules/*"
-      env:
-        CI: true
+    - run: npm publish
 
     - uses: actions/upload-artifact@v4
       with:
