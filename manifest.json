@@ -16,7 +16,7 @@
   "content_scripts": [
     {
       "matches": ["https://*.nytimes.com/*"],
-      "js": ["scripts/solver.js", "scripts/answers.js", "scripts/content.js"]
+      "js": ["scripts/solver.js", "scripts/content.js"]
     }
   ],
   "web_accessible_resources": [
