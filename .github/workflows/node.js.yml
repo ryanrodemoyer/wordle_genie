@@ -33,3 +33,4 @@ jobs:
         with:
           name: chrome-extension.zip
           path: output/chrome-extension.zip
+          retention-days: 90
