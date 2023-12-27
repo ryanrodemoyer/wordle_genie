@@ -5,7 +5,7 @@
   "main": "answers.js",
   "scripts": {
     "test": "jest",
-    "publish": "mkdir -p dist && cp -r icons scripts includes dist/ && cp LICENSE manifest.json popup.html dist/ && mkdir output && cd dist && zip -r ../output/chrome-extension.zip *"
+    "package": "mkdir -p dist && cp -r icons scripts includes dist/ && cp LICENSE manifest.json popup.html dist/ && mkdir output && cd dist && zip -r ../output/chrome-extension.zip *"
   },
   "keywords": [],
   "author": "",
