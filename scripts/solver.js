@@ -125,7 +125,3 @@ const solver = (config) => {
 
   return { attempts: results };
 };
-
-if (module) {
-  module.exports = solver;
-}

@@ -25,6 +25,6 @@
       "matches": ["https://*.nytimes.com/*"]
     }
   ],
-  "permissions": ["activeTab"],
+  "permissions": [],
   "host_permissions": ["https://*.nytimes.com/*"]
 }
