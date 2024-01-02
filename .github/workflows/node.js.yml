@@ -25,6 +25,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+      - name: Set custom version number
+        run: echo "CUSTOM_VERSION=0.1.${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
+      - name: Update manifest.json with custom version number
+        run: |
+          jq --arg v "$CUSTOM_VERSION" '.version = $v' public/manifest.json > temp.json && mv temp.json public/manifest.json
+
       - run: npm ci
       - run: npm run repack
 
