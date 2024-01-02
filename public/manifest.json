@@ -11,14 +11,11 @@
     "48": "icons/icon_48.png",
     "128": "icons/icon_128.png"
   },
-  "background": {
-    "service_worker": "background.js"
-  },
   "action": {
     "default_title": "Wordle Genie",
     "default_popup": "popup.html"
   },
-  "permissions": ["storage"],
+  "permissions": [""],
   "content_scripts": [
     {
       "matches": ["https://*.nytimes.com/*"],
