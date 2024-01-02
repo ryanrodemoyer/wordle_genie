@@ -15,7 +15,6 @@
     "default_title": "Wordle Genie",
     "default_popup": "popup.html"
   },
-  "permissions": [""],
   "content_scripts": [
     {
       "matches": ["https://*.nytimes.com/*"],
