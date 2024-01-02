@@ -6,6 +6,8 @@ This extension integrates directly with the Wordle game to show the remaining po
 
 Chrome Store
 
+https://chromewebstore.google.com/detail/wordle-genie/efmlmfakkgbpgbafenclnlklefiacmma
+
 Edge Store
 
 Firefox Store
