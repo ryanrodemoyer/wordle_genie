@@ -254,14 +254,27 @@ function buttonSearch() {
 
 var intervalId_buttonSearch = setInterval(buttonSearch, 500);
 
-function adSearch() {
-  const ids = ['ad-top'];
-  ids.forEach((x) => {
-    const ad = document.getElementById(x);
-    if (ad) {
-      ad.style.minHeight = '0px';
-    }
-  });
+function scrollToGame() {
+  const game = document.querySelector('div[class^="App-module_gameContainer"');
+  if (game) {
+    game.scrollIntoView();
+    clearInterval(intervalId_scrollToGame);
+  }
 }
 
-var internalId_adSearch = setInterval(adSearch, 1000);
+var intervalId_scrollToGame = setInterval(scrollToGame, 500);
+
+function fixFooter() {
+  // the footer overlaps with the in-game keyboard
+  // so this gets it back to the bottom of the page
+  const main = document.querySelector('main');
+  const footer = document.querySelector('footer');
+  if (main && footer) {
+    main.style.removeProperty('max-height');
+    footer.style.position = 'relative';
+
+    clearInterval(intervalId_fixFooter);
+  }
+}
+
+var intervalId_fixFooter = setInterval(fixFooter, 500);
